@@ -21,7 +21,9 @@ func NewDatabaseManager(databaseURI string) (MongoManager, error) {
 		log.Println("MongoManager error to connected database", err)
 		return nil, err
 	}
-	return &DatabaseManager{}, nil
+	return &DatabaseManager{
+		client: client,
+	}, nil
 }
 
 func (d *DatabaseManager) SetDatabase(name string) {
