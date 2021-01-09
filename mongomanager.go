@@ -10,7 +10,7 @@ import (
 )
 
 type DatabaseManager struct {
-	client *mongo.Client
+	client   *mongo.Client
 	database *mongo.Database
 }
 
@@ -31,7 +31,7 @@ func (d *DatabaseManager) SetDatabase(name string) {
 }
 
 func (d *DatabaseManager) GetItemById(table, id string, result interface{}) {
-	idB,_ := primitive.ObjectIDFromHex(id)
+	idB, _ := primitive.ObjectIDFromHex(id)
 	d.database.Collection(table).FindOne(context.Background(), bson.M{"_id": idB}).Decode(result)
 }
 
@@ -57,6 +57,25 @@ func (d *DatabaseManager) InsertItem(table string, item interface{}) (string, er
 	}
 	return res.InsertedID.(primitive.ObjectID).Hex(), nil
 }
+
+
+func (d *DatabaseManager) DeleteItem(table string, id primitive.ObjectID) error {
+	_, err := d.database.Collection(table).DeleteOne(context.Background(), bson.M{"_id" : id})
+	return err
+}
+
+func (d *DatabaseManager) UpdateItem(table string, item interface{}, id primitive.ObjectID) error {
+	_, err := d.database.Collection(table).UpdateOne(context.Background(), bson.M{"_id": id}, item)
+	return err
+}
+
+func (d *DatabaseManager) CreateFilterWithObjectID(name string, value primitive.ObjectID) interface{} {
+	f := bson.M{}
+	f[name] = value
+	return f
+}
+
+
 
 func (d *DatabaseManager) Close() {
 	d.client.Disconnect(context.Background())

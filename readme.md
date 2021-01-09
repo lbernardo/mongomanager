@@ -150,6 +150,65 @@ func main() {
 	log.Println("Id", id)
 }
 ```
+
+`func (d *DatabaseManager) UpdateItem(table string, item interface{}, id primitive.ID) error`
+
+```go
+/// Update Item
+package main
+
+import (
+	"github.com/lbernardo/mongomanager"
+	"go.mongodb.org/mongo-driver/bson/primitive"
+	"log"
+	"os"
+)
+
+type User struct {
+	Name string
+}
+
+func main() {
+	conn, err := mongomanager.NewDatabaseManager(os.Getenv("DATABASE_URI"))
+	if err != nil {
+		panic(err)
+	}
+	defer conn.Close()             // Disconnect
+	conn.SetDatabase("mydatabase") // Select database
+	id,_ := primitive.ObjectIDFromHex("5ff8f3e5721a0ac053e5e8b5")
+	conn.UpdateItem("users", User{Name: "Lucas"}, id)
+}
+```
+
+`func (d *DatabaseManager) DeleteItem(table string, id primitive.ID) error`
+
+```go
+/// Delete Item
+package main
+
+import (
+	"github.com/lbernardo/mongomanager"
+	"go.mongodb.org/mongo-driver/bson/primitive"
+	"log"
+	"os"
+)
+
+type User struct {
+	Name string
+}
+
+func main() {
+	conn, err := mongomanager.NewDatabaseManager(os.Getenv("DATABASE_URI"))
+	if err != nil {
+		panic(err)
+	}
+	defer conn.Close()             // Disconnect
+	conn.SetDatabase("mydatabase") // Select database
+	id,_ := primitive.ObjectIDFromHex("5ff8f3e5721a0ac053e5e8b5")
+	conn.DeleteItem("users",  id)
+}
+```
+
 `func (d *DatabaseManager) SetDatabase(name string)`
 ```go
 // Select database
