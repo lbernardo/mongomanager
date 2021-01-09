@@ -64,8 +64,11 @@ func (d *DatabaseManager) DeleteItem(table string, id primitive.ObjectID) error 
 	return err
 }
 
-func (d *DatabaseManager) UpdateItem(table string, item interface{}, id primitive.ObjectID) error {
-	_, err := d.database.Collection(table).UpdateOne(context.Background(), bson.M{"_id": id}, item)
+func (d *DatabaseManager) UpdateItem(table string, id primitive.ObjectID, item interface{}) error {
+	itemDocument := bson.M{
+		"$set" :  item,
+	}
+	_, err := d.database.Collection(table).UpdateOne(context.Background(), bson.M{"_id": id}, itemDocument)
 	return err
 }
 

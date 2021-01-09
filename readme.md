@@ -176,7 +176,7 @@ func main() {
 	defer conn.Close()             // Disconnect
 	conn.SetDatabase("mydatabase") // Select database
 	id,_ := primitive.ObjectIDFromHex("5ff8f3e5721a0ac053e5e8b5")
-	conn.UpdateItem("users", User{Name: "Lucas"}, id)
+	conn.UpdateItem("users", id, User{Name: "Lucas"})
 }
 ```
 

@@ -9,7 +9,7 @@ type MongoManager interface {
 	GetManyItems(table string, filter interface{}, result interface{})
 	InsertItem(table string, item interface{}) (string, error)
 	DeleteItem(table string, id primitive.ObjectID) error
-	UpdateItem(table string, item interface{}, id primitive.ObjectID) error
+	UpdateItem(table string, id primitive.ObjectID, item interface{}) error
 	CreateFilterWithObjectID(name string, value primitive.ObjectID) interface{}
 	Close()
 }
