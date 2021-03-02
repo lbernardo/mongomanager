@@ -2,11 +2,12 @@ package mongomanager
 
 import (
 	"context"
+	"log"
+
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
-	"log"
 )
 
 type DatabaseManager struct {
@@ -58,15 +59,14 @@ func (d *DatabaseManager) InsertItem(table string, item interface{}) (string, er
 	return res.InsertedID.(primitive.ObjectID).Hex(), nil
 }
 
-
 func (d *DatabaseManager) DeleteItem(table string, id primitive.ObjectID) error {
-	_, err := d.database.Collection(table).DeleteOne(context.Background(), bson.M{"_id" : id})
+	_, err := d.database.Collection(table).DeleteOne(context.Background(), bson.M{"_id": id})
 	return err
 }
 
 func (d *DatabaseManager) UpdateItem(table string, id primitive.ObjectID, item interface{}) error {
 	itemDocument := bson.M{
-		"$set" :  item,
+		"$set": item,
 	}
 	_, err := d.database.Collection(table).UpdateOne(context.Background(), bson.M{"_id": id}, itemDocument)
 	return err
@@ -78,7 +78,9 @@ func (d *DatabaseManager) CreateFilterWithObjectID(name string, value primitive.
 	return f
 }
 
-
+func (d *DatabaseManager) TruncateTable(table string) {
+	d.database.Collection(table).DeleteMany(context.Background(), bson.M{})
+}
 
 func (d *DatabaseManager) Close() {
 	d.client.Disconnect(context.Background())

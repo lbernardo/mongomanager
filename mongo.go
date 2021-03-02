@@ -11,5 +11,6 @@ type MongoManager interface {
 	DeleteItem(table string, id primitive.ObjectID) error
 	UpdateItem(table string, id primitive.ObjectID, item interface{}) error
 	CreateFilterWithObjectID(name string, value primitive.ObjectID) interface{}
+	TruncateTable(table string)
 	Close()
 }
